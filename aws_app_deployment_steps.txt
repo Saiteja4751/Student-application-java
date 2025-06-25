@@ -1,0 +1,44 @@
+
+✅ Application Deployment Using AWS Cloud – Step-by-Step Summary
+
+1. Project Objective
+   I have successfully completed the deployment of my application using the AWS Cloud platform, ensuring it is accessible, scalable, and secure.
+
+2. Creating the EC2 Instance
+   - Launched an EC2 (Elastic Compute Cloud) instance using Amazon Linux or Ubuntu AMI.
+   - Configured inbound rules in the security group to allow HTTP (port 80/8080) and SSH (port 22) access.
+   - Installed Docker and optionally Docker Compose on the EC2 instance.
+
+3. Setting Up AWS RDS (Relational Database Service)
+   - Created a MySQL RDS instance for centralized database storage.
+   - Configured RDS security groups to allow inbound connections from the EC2 instance’s IP.
+   - Created a database (studentdb) and set the master username and password.
+
+4. Storing and Running the Dockerized App on EC2
+   - Pulled my application image from Docker Hub:
+     docker pull saiteja4751/student-app:latest
+   - Ran the application container using the RDS endpoint as the MySQL host:
+     docker run -d \
+       --name student-app \
+       -e SPRING_DATASOURCE_URL=jdbc:mysql://<RDS-ENDPOINT>:3306/studentdb \
+       -e SPRING_DATASOURCE_USERNAME=admin \
+       -e SPRING_DATASOURCE_PASSWORD=admin123 \
+       -p 8080:8080 \
+       saiteja4751/student-app:latest
+
+5. Testing the Application
+   - Accessed the app via:  
+     http://<EC2-PUBLIC-IP>:8080
+   - Verified the database connection from the app to RDS.
+
+6. Ensuring Persistence and Monitoring
+   - Enabled CloudWatch monitoring for EC2 and RDS to track CPU usage, memory, and DB connections.
+   - Set up automatic backups and multi-AZ failover for the RDS instance (optional for production).
+
+7. (Optional) Making the Application Highly Available
+   - Configured an Elastic Load Balancer (ELB) in front of multiple EC2 instances.
+   - Used Auto Scaling Groups to automatically increase or decrease EC2 instances based on traffic.
+
+8. Security Best Practices Implemented
+   - Used IAM roles for secure access to AWS services.
+   - Ensured all sensitive data (DB credentials) are stored using environment variables or AWS Secrets Manager.
